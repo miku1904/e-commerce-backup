@@ -13,6 +13,11 @@
 .ProductImage {
   padding: 5px 26px 16px 26px;
   border-bottom: 1px solid #b1b1b1;
+  
+}
+.ProductImage img{
+  width: 224px;
+  height: 141px;
 }
 
 .ProductDetail {

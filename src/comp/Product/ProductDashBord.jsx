@@ -22,13 +22,6 @@ const ProductDashBord = () => {
       </div>
       <div className={style.ProductCartWrapper}>
         <ProductCart />
-        <ProductCart />
-        <ProductCart />
-        <ProductCart />
-        <ProductCart />
-        <ProductCart />
-        <ProductCart />
-        <ProductCart /> 
       </div>
     </div>
   );

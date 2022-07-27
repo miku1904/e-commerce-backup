@@ -3,7 +3,6 @@ import { storage, db } from "../../firebase";
 import { getDownloadURL, ref, uploadBytes, uploadBytesResumable } from "firebase/storage";
 import {v4} from "uuid"
 import { collection, addDoc } from "firebase/firestore"; 
-import { async } from "@firebase/util";
 
 const AddProduct = () => {
   const [productData, setProductData] = useState({
@@ -35,19 +34,16 @@ const AddProduct = () => {
       const prog = Math.round(
         (snapshot.bytesTransferred/snapshot.totalBytes) * 100
       ); 
-      console.log(prog);
+      console.log(prog);  
       },(err)=>console.log(err),
       () =>{
         getDownloadURL(upload.snapshot.ref)
         .then(async(url)=>{
           await addDoc(collection(db, "Products"), {
-              ProductName: productData.productName,
-              ProductPrice: Number(productData.ProductPrice),
-              ProductImg: url,
-            })
-              .catch((err) => console.log(err));
-
-
+            ProductName: productData.productName,
+            ProductPrice: Number(productData.ProductPrice),
+            ProductImg: url,
+          }).catch((err) => console.log(err));
         })
       }
       )
