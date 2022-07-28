@@ -95,7 +95,7 @@ const Formvalidation = () => {
     <>
       <div className={Style.SigUpMain}>
         <div className={Style.SignUp}>
-          <p>Welcome back! 👋</p>
+          <p>Welcome 👋</p>
           <h3>Sign Up your account</h3>
           <form className={Style.SignUpForm} onSubmit={handleSubmit}>
             <label className={Style.InputLable}>NAME</label>

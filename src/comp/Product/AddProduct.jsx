@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { storage, db } from "../../firebase";
-import { getDownloadURL, ref, uploadBytes, uploadBytesResumable } from "firebase/storage";
+import { getDownloadURL, ref,  uploadBytesResumable } from "firebase/storage";
 import {v4} from "uuid"
 import { collection, addDoc } from "firebase/firestore"; 
 
@@ -102,19 +102,19 @@ const AddProduct = () => {
             </div>
             <div className="modal-body">
               <form onSubmit={handelSubmit}>
-                <div class="input-group mb-3">
+                <div className="input-group mb-3">
                   <input
                     type="file"
-                    class="form-control"
+                    className="form-control"
                     id="inputGroupFile02"
                     onChange={productImageHandler}
                   />
                 </div>
-                <div class="mb-3">
+                <div className="mb-3">
                   <input
                     type="text"
                     name="productName"
-                    class="form-control mb-3"
+                    className="form-control mb-3"
                     id="exampleFormControlInput1"
                     placeholder="Product Name"
                     onChange={handlechange}
@@ -122,13 +122,15 @@ const AddProduct = () => {
                   <input
                     type="number"
                     name="ProductPrice"
-                    class="form-control"
+                    className="form-control"
                     id="exampleFormControlInput1"
                     placeholder="Product Prize"
                     onChange={handlechange}
                   />
                 </div>
-                <button className="btn btn-primary" type="submit">Add Product</button>
+                <button className="btn btn-primary" type="submit">
+                  Add Product
+                </button>
               </form>
             </div>
             <div className="modal-footer">
