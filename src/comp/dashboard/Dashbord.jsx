@@ -12,8 +12,9 @@ import { signOut } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { LogoutUser } from "../../redux/action/User";
+import WishList from '../WishProduct/WishList'
 
-const Dashbord = () => {
+const Dashbord = ({children}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -46,7 +47,9 @@ const Dashbord = () => {
             <div className={style.HomeMain}>
               <img src={Home} alt="Home" />
               <div className={style.HomeLogoText}>
-                <h4>Main page </h4>
+                <Link to="/productdashboard" className={style.HomeLogoLink}>
+                  <h4>Main page </h4>
+                </Link>
                 <img
                   className={style.ArrowHome}
                   src={ArrowHome}
@@ -61,26 +64,30 @@ const Dashbord = () => {
           <div className={style.UserProfile}>
             <img src={UserProfile}></img>
             <h3>Dharmik</h3>
-              <button  onClick={handleLogOut}>Logout</button>
+            <button onClick={handleLogOut}>Logout</button>
           </div>
 
           <div className={style.Navbar}>
             <div className={style.NavbarItem}>
               <div className={style.WishNavbar}>
-                <div className={style.NavIcon}>
-                  <img src={HeartIcon} alt="heart" />
-                  <h5>Wish List (0)</h5>
+                <div className={style.NavIconHEart}>
+                  <Link to="/WishListdashboard" className={style.WishLink}>
+                    <img src={HeartIcon} alt="heart" />
+                    <h5>Wish List (0)</h5>
+                  </Link>
                 </div>
                 <div className={style.NavIcon}>
-                  <img src={Cart} alt="Cart" />
-                  <h5>2 Products -</h5>
+                  <Link to="/Cartdashboard" className={style.WishLink}>
+                    <img src={Cart} alt="Cart" />
+                    <h5>2 Products -</h5>
+                  </Link>
                   <h4>$1000</h4>
                 </div>
               </div>
             </div>
           </div>
-      <ProductDashBord/>
         </div>
+        <div className={style.ProductDashBord}>{children}</div>
       </div>
     </>
   );

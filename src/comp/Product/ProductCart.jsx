@@ -44,12 +44,12 @@ const ProductCart = () => {
                 />
                 <ul class="dropdown-menu  "  aria-labelledby="dropdownMenuLink">
                   <li>
-                    <a class="dropdown-item" type="button">
+                    <a class="dropdown-item" type="button" >
                       Edit Product
                     </a>
                   </li>
                   <li>
-                    <a class="dropdown-item" type="button">
+                    <a class="dropdown-item" type="button"  >
                       Delet Product
                     </a>
                   </li>

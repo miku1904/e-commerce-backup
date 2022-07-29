@@ -33,7 +33,7 @@ const handleSubmit = (e) =>{
    signInWithEmailAndPassword(auth, ldata.email, ldata.password)
       .then(async (res) => {
         console.log(res.user);
-        navigate("/dashboard");
+        navigate("/productdashboard");
       })
       .catch((err) => {
        setFirebaseError(err.message);
