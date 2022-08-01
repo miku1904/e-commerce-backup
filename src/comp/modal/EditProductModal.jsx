@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import "./EditProduct.css"
+import { useDispatch, useSelector } from "react-redux";
 
 const EditProductModal = ({ productdetail }) => {
-  // console.log(productdetail?.ProductName);
-  const [producs, setproducts] = useState();
+  console.log(productdetail,"productdetail")
+  // const [producs, setproducts] = useState();
+  const [prodDetail,setProdDetail] = useState()
   const [productData, setProductData] = useState({
     productName: "",
     ProductPrice: "",
   });
+  // const dispatch = useDispatch();
+  const projectDetail = useSelector((state) => state.productReducer);
+  console.log(projectDetail,'product')
+  let currentProject = projectDetail.find((item) => item.id === productdetail);
+  console.log(currentProject,'currentProduct')
   // const [productImg, setProductimg] = useState(null);  
   // useEffect(() => {
   //   setproducts(productdetail);
@@ -18,8 +25,13 @@ const EditProductModal = ({ productdetail }) => {
   //   if (e.target.files[0]) {
   //     setProductimg(e.target.files[0]);
   //   }
-  // };
-
+  // // };
+  // useEffect(()=>{
+  //   setProdDetail(productdetail)
+  // },[productdetail])
+  
+  
+  console.log(prodDetail,"product");
   const handlechange = (e) => {
     const value = e.target.value;
     setProductData({
@@ -27,6 +39,7 @@ const EditProductModal = ({ productdetail }) => {
       [e.target.name]: value,
     });
   };
+
 
   return (
     <>
@@ -65,11 +78,11 @@ const EditProductModal = ({ productdetail }) => {
                     name="productName"
                     className="form-control mb-3"
                     id="exampleFormControlInput1"
-                    placeholder="Product Name"
+                    placeholder={currentProject?.ProductName}
                     // defaultValue={productName}
-                    value={productdetail?.productName}
+                    value={currentProject?.ProductName}
                     // defaultValue={productdetail?.ProductName}
-                    // onChange={handlechange}
+                    onChange={handlechange} 
                   />
                   <input
                     type="number"

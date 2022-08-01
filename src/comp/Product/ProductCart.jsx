@@ -6,12 +6,43 @@ import CartIconBlanck from "../../asert/CartIconBlanck.svg";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase";
 import EditProductModal from "../modal/EditProductModal";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  query,
+  // collection,
+  // getDocs,
+  where,
+  addDoc,
+  doc,
+  deleteDoc,
+} from "firebase/firestore/lite";
+import { Fetch_Product } from "../../redux/action/ProductAction";
 
 const ProductCart = () => {
   const [product, SetProduct] = useState([]);
   const [productdetail, setproductdetail] = useState();
   // console.log(productdetail.ProductName);
   const productsCollectionRef = collection(db, "Products");
+  const dispatch = useDispatch();
+
+
+  
+  const fetchProjectData = async () => {
+    try {
+      const q = query(collection(db, "Products"));
+      const doc = await getDocs(q);
+      
+      doc.forEach((doc) => {
+        dispatch(Fetch_Product(doc.data()));
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchProjectData();
+  }, []);
 
   useEffect(() => {
     const getProducts = async () => {
@@ -57,15 +88,21 @@ const ProductCart = () => {
                       type="button"
                       data-bs-toggle="modal"
                       data-bs-target="#exampleEditProductModal "
-                      onClick={() => getProductId(prod)}
+                      onClick={() => getProductId(prod.id)}
                     >
                       Edit Product
                     </a>
-                    <EditProductModal
+                  
+                    {/* {
+                      productdetail?.ProductName?<>
+                      <EditProductModal
                       // productName={productdetail.productName}
                       productdetail={productdetail}
                       // productId={productid}
                     />
+                    </>:""
+                    } */}
+                    
                   </li>
                   <li>
                     <a class="dropdown-item" type="button">
@@ -87,6 +124,13 @@ const ProductCart = () => {
           </div>
         );
       })}
+
+    
+       <EditProductModal
+                      // productName={productdetail.productName}
+                      productdetail={productdetail}
+                      // productId={productid}
+                    />
     </>
   );
 };
