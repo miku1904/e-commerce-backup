@@ -3,6 +3,7 @@ import { storage, db } from "../../firebase";
 import { getDownloadURL, ref,  uploadBytesResumable } from "firebase/storage";
 import {v4} from "uuid"
 import { collection, addDoc } from "firebase/firestore"; 
+import "./AddProduct.css"
 
 const AddProduct = () => {
   const [productData, setProductData] = useState({
@@ -83,7 +84,6 @@ const AddProduct = () => {
       <div
         className="modal fade"
         id="exampleModal"
-        tabindex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
       >
@@ -91,7 +91,7 @@ const AddProduct = () => {
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="exampleModalLabel">
-                Modal title
+                Add Product
               </h5>
               <button
                 type="button"

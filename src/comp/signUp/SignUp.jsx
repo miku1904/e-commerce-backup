@@ -45,7 +45,7 @@ const SignUp = () => {
           password: data.password,
           role:data.role,
         });
-        navigate("/dashboard");
+        navigate("/productdashboard");
       })
       .catch((err) => { 
         setFirebaseError(err.message);

@@ -9,7 +9,7 @@ import { query, collection, getDocs, where } from "firebase/firestore";
 
 const CurrentUser = () => {
   const [user, loading, error] = useAuthState(auth);
-  console.log(user)
+  // console.log(user)
   const dispatch = useDispatch();
   const fetchUserData = async () => {
     try {
@@ -24,7 +24,7 @@ const CurrentUser = () => {
           uid: dataId
         };
         dispatch(Get_User(userData));
-        console.log(doc);
+        // console.log(doc);
       } catch (err) {
         console.error(err);
       }

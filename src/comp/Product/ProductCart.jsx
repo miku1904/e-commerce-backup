@@ -5,9 +5,12 @@ import DotMenu  from "../../asert/DotMenu.svg"
 import CartIconBlanck from "../../asert/CartIconBlanck.svg";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase";
+import EditProductModal from "../modal/EditProductModal";
 
 const ProductCart = () => {
   const [product, SetProduct] = useState([]);
+  const [productdetail, setproductdetail] = useState();
+  // console.log(productdetail.ProductName);
   const productsCollectionRef = collection(db, "Products");
 
   useEffect(() => {
@@ -18,11 +21,16 @@ const ProductCart = () => {
     getProducts();
   }, []);
 
+  const getProductId = (prod) =>{
+      setproductdetail(prod);
+      // console.log(prod)
+  }
+
   return (  
     <>
-      {product.map((prod) => {
+      {product.map((prod , index) => {
         return (
-          <div className={style.ProductCart}>
+          <div className={style.ProductCart} key={index}>
             <div className={style.IconImage_wrapper}>
               <div className={style.CartIconBlanck}>
                 <img src={CartIconBlanck} alt="" />
@@ -42,14 +50,25 @@ const ProductCart = () => {
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 />
-                <ul class="dropdown-menu  "  aria-labelledby="dropdownMenuLink">
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                   <li>
-                    <a class="dropdown-item" type="button" >
+                    <a
+                      class="dropdown-item"
+                      type="button"
+                      data-bs-toggle="modal"
+                      data-bs-target="#exampleEditProductModal "
+                      onClick={() => getProductId(prod)}
+                    >
                       Edit Product
                     </a>
+                    <EditProductModal
+                      // productName={productdetail.productName}
+                      productdetail={productdetail}
+                      // productId={productid}
+                    />
                   </li>
                   <li>
-                    <a class="dropdown-item" type="button"  >
+                    <a class="dropdown-item" type="button">
                       Delet Product
                     </a>
                   </li>

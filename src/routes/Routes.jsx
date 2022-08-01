@@ -17,7 +17,7 @@ function ApplicationRoutes() {
     <>
       <BrowserRouter>
         <Routes>
-          {console.log(userDetail, "userDetail")}
+          {/* {console.log(userDetail, "userDetail")} */}
           <Route exact path="/" element={<SignIn />} />
           <Route path="/SignUp" element={<SignUp />} />
 
