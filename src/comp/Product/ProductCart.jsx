@@ -33,7 +33,7 @@ const ProductCart = () => {
       const doc = await getDocs(q);
       
       doc.forEach((doc) => {
-        dispatch(Fetch_Product(doc.data()));
+        dispatch(Fetch_Product({...doc.data(),id:doc.id}));
       });
     } catch (err) {
       console.error(err);

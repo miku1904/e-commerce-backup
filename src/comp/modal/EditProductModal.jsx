@@ -6,15 +6,31 @@ const EditProductModal = ({ productdetail }) => {
   console.log(productdetail,"productdetail")
   // const [producs, setproducts] = useState();
   const [prodDetail,setProdDetail] = useState()
+  const [productImg, setProductimg] = useState(null);  
   const [productData, setProductData] = useState({
-    productName: "",
+    ProductName: "",
     ProductPrice: "",
+    ProductImg:"",
+    id:""
   });
-  // const dispatch = useDispatch();
+  // const projectDetail = useSelector((state) => state.productReducer);
+  // console.log(projectDetail,'product')
+  // let currentProject = projectDetail.find((item) => item.id === productdetail);
+  // console.log(currentProject,'currentProduct')
   const projectDetail = useSelector((state) => state.productReducer);
   console.log(projectDetail,'product')
   let currentProject = projectDetail.find((item) => item.id === productdetail);
-  console.log(currentProject,'currentProduct')
+  // console.log(currentProject,'currentProduct')
+  const productImageHandler = (e) => {
+    if (e.target.files[0]) {
+      setProductimg(e.target.files[0]);
+    }
+  };
+  
+  useEffect(()=>{
+    setProductData(currentProject)
+    console.log(productData,"productData")
+  },[productdetail])
   // const [productImg, setProductimg] = useState(null);  
   // useEffect(() => {
   //   setproducts(productdetail);
@@ -31,7 +47,7 @@ const EditProductModal = ({ productdetail }) => {
   // },[productdetail])
   
   
-  console.log(prodDetail,"product");
+  // console.log(prodDetail,"product");
   const handlechange = (e) => {
     const value = e.target.value;
     setProductData({
@@ -64,23 +80,27 @@ const EditProductModal = ({ productdetail }) => {
             </div>
             <div className="modal-body">
               <form>
+                <div className="input-group mb-3 ">
+                  <img src={productData?.ProductImg} alt="image" className='img-fluid w-50 m-auto' />
+                 
+                </div>
                 <div className="input-group mb-3">
                   <input
                     type="file"
                     className="form-control"
                     id="inputGroupFile02"
-                    // onChange={productImageHandler}
+                    onChange={productImageHandler}
                   />
                 </div>
                 <div className="mb-3">
                   <input
                     type="text"
-                    name="productName"
+                    name="ProductName"
                     className="form-control mb-3"
                     id="exampleFormControlInput1"
-                    placeholder={currentProject?.ProductName}
+                    placeholder="productName"
                     // defaultValue={productName}
-                    value={currentProject?.ProductName}
+                    value={productData?.ProductName}
                     // defaultValue={productdetail?.ProductName}
                     onChange={handlechange} 
                   />
@@ -90,11 +110,12 @@ const EditProductModal = ({ productdetail }) => {
                     className="form-control"
                     id="exampleFormControlInput1"
                     placeholder="Product Prize"
+                    value={productData?.ProductPrice}
                     onChange={handlechange}
                   />
                 </div>
                 <button className="btn btn-primary" type="submit">
-                  Add Product
+                  Edit Product
                 </button>
               </form>
             </div>
