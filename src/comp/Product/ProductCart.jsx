@@ -9,8 +9,6 @@ import EditProductModal from "../modal/EditProductModal";
 import { useDispatch, useSelector } from "react-redux";
 import {
   query,
-  // collection,
-  // getDocs,
   where,
   addDoc,
   doc,
@@ -20,8 +18,7 @@ import { Fetch_Product } from "../../redux/action/ProductAction";
 
 const ProductCart = () => {
   const [product, SetProduct] = useState([]);
-  const [productdetail, setproductdetail] = useState();
-  // console.log(productdetail.ProductName);
+  const [editproductId, seteditproductId] = useState();
   const productsCollectionRef = collection(db, "Products");
   const dispatch = useDispatch();
 
@@ -53,13 +50,13 @@ const ProductCart = () => {
   }, []);
 
   const getProductId = (prod) =>{
-      setproductdetail(prod);
+      seteditproductId(prod);
       // console.log(prod)
   }
 
-  return (  
+  return (
     <>
-      {product.map((prod , index) => {
+      {product.map((prod, index) => {
         return (
           <div className={style.ProductCart} key={index}>
             <div className={style.IconImage_wrapper}>
@@ -92,7 +89,7 @@ const ProductCart = () => {
                     >
                       Edit Product
                     </a>
-                  
+
                     {/* {
                       productdetail?.ProductName?<>
                       <EditProductModal
@@ -102,7 +99,6 @@ const ProductCart = () => {
                     />
                     </>:""
                     } */}
-                    
                   </li>
                   <li>
                     <a class="dropdown-item" type="button">
@@ -125,12 +121,11 @@ const ProductCart = () => {
         );
       })}
 
-    
-       <EditProductModal
-                      // productName={productdetail.productName}
-                      productdetail={productdetail}
-                      // productId={productid}
-                    />
+      <EditProductModal
+        // productName={productdetail.productName}
+        editproductId ={editproductId}
+        // productId={productid}
+      />
     </>
   );
 };

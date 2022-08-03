@@ -96,7 +96,7 @@ const handleSubmit = (e) =>{
               name="password"
               onChange={handleLogInChange}
               value={ldata.password}
-              type="text"
+              type="password"
             ></input>
             {Object.keys(passwordErr).map((key) => {
               return <p className={Style.InputError}>{passwordErr[key]}</p>;

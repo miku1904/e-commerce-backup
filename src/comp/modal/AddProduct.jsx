@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { storage, db } from "../../firebase";
 import { getDownloadURL, ref,  uploadBytesResumable } from "firebase/storage";
+import { storage, db } from "../../firebase";
 import {v4} from "uuid"
 import { collection, addDoc } from "firebase/firestore"; 
 import "./AddProduct.css"
 
 const AddProduct = () => {
   const [productData, setProductData] = useState({
-    productName: "",
+    ProductName: "",
     ProductPrice: "",
   });
   const [productImg, setProductimg] = useState(null);
@@ -41,7 +41,7 @@ const AddProduct = () => {
         getDownloadURL(upload.snapshot.ref)
         .then(async(url)=>{
           await addDoc(collection(db, "Products"), {
-            ProductName: productData.productName,
+            ProductName: productData.ProductName,
             ProductPrice: Number(productData.ProductPrice),
             ProductImg: url,
           }).catch((err) => console.log(err));

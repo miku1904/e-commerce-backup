@@ -1,53 +1,43 @@
-import React, { useEffect, useState } from 'react'
-import "./EditProduct.css"
+import React, { useEffect, useState } from "react";
+import "./EditProduct.css";
 import { useDispatch, useSelector } from "react-redux";
+import { storage, db } from "../../firebase";
+import { v4 } from "uuid";
+import {
+  collection,
+  addDoc,
+  updateDoc,
+  doc,
+  query,
+  where,
+  getDocs,
+  setDoc,
+} from "firebase/firestore";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
-const EditProductModal = ({ productdetail }) => {
-  console.log(productdetail,"productdetail")
-  // const [producs, setproducts] = useState();
-  const [prodDetail,setProdDetail] = useState()
-  const [productImg, setProductimg] = useState(null);  
+const EditProductModal = ({ editproductId }) => {
+  const [productImg, setProductimg] = useState();
   const [productData, setProductData] = useState({
     ProductName: "",
     ProductPrice: "",
-    ProductImg:"",
-    id:""
+    id: "",
   });
-  // const projectDetail = useSelector((state) => state.productReducer);
+  const productdetail = useSelector((state) => state.productReducer);
   // console.log(projectDetail,'product')
-  // let currentProject = projectDetail.find((item) => item.id === productdetail);
-  // console.log(currentProject,'currentProduct')
-  const projectDetail = useSelector((state) => state.productReducer);
-  console.log(projectDetail,'product')
-  let currentProject = projectDetail.find((item) => item.id === productdetail);
-  // console.log(currentProject,'currentProduct')
+  let currentProject = productdetail.find((item) => item.id === editproductId);
+  console.log(productData, "currentProduct");
+
   const productImageHandler = (e) => {
     if (e.target.files[0]) {
       setProductimg(e.target.files[0]);
     }
   };
-  
-  useEffect(()=>{
-    setProductData(currentProject)
-    console.log(productData,"productData")
-  },[productdetail])
-  // const [productImg, setProductimg] = useState(null);  
-  // useEffect(() => {
-  //   setproducts(productdetail);
-  //   console.log(producs);
-  // }, []);
 
-  // const productImageHandler = (e) => {
-  //   if (e.target.files[0]) {
-  //     setProductimg(e.target.files[0]);
-  //   }
-  // // };
-  // useEffect(()=>{
-  //   setProdDetail(productdetail)
-  // },[productdetail])
-  
-  
-  // console.log(prodDetail,"product");
+  useEffect(() => {
+    setProductData(currentProject);
+    // console.log(productData, "productData");
+  }, [editproductId]);
+
   const handlechange = (e) => {
     const value = e.target.value;
     setProductData({
@@ -55,7 +45,39 @@ const EditProductModal = ({ productdetail }) => {
       [e.target.name]: value,
     });
   };
-
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    if(productImg){
+        const storageRef = ref(storage, `product-images/${productImg + v4()}`);
+        const upload = uploadBytesResumable(storageRef, productImg);
+        upload.on(
+          "state_changed",
+          (snapshot) => {
+            const prog = Math.round(
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+            );
+            console.log(prog);
+          },
+          (err) => console.log(err),
+          () => {
+            getDownloadURL(upload.snapshot.ref).then(async (url) => {
+              await setDoc(doc(db, "Products", editproductId), {
+                ProductName: productData.ProductName,
+                ProductImg: url,
+                ProductPrice: productData.ProductPrice,
+              }).catch((err) => console.log(err));
+            });
+          }
+        );
+    }
+    else{
+      await setDoc(doc(db, "Products", editproductId), {
+        ProductName: productData.ProductName,
+        ProductImg:productData.ProductImg,
+        ProductPrice: productData.ProductPrice,
+      }).catch((err) => console.log(err));
+    }
+  };
 
   return (
     <>
@@ -65,12 +87,13 @@ const EditProductModal = ({ productdetail }) => {
         aria-labelledby="exampleEditProductLabel"
         aria-hidden="true"
       >
-        <div className="modal-dialog">
+        <div className="modal-dialog editModal">
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title" id="exampleEditProductLabel">
+              <h5 className="modal-title me-5" id="exampleEditProductLabel">
                 Edit product
               </h5>
+              {/* <h5>{productData?.id}</h5> */}
               <button
                 type="button"
                 className="btn-close"
@@ -79,16 +102,19 @@ const EditProductModal = ({ productdetail }) => {
               ></button>
             </div>
             <div className="modal-body">
-              <form>
-                <div className="input-group mb-3 ">
-                  <img src={productData?.ProductImg} alt="image" className='img-fluid w-50 m-auto' />
-                 
+              <form onSubmit={handleEditSubmit}>
+                <div className="input-group mb-3">
+                  <img
+                    src={productData?.ProductImg}
+                    alt="image"
+                    className="img-fluid w-50 m-auto h-25 d-inline-block"
+                  />
                 </div>
                 <div className="input-group mb-3">
                   <input
+                    class="form-control"
                     type="file"
-                    className="form-control"
-                    id="inputGroupFile02"
+                    id="formFile"
                     onChange={productImageHandler}
                   />
                 </div>
@@ -102,7 +128,7 @@ const EditProductModal = ({ productdetail }) => {
                     // defaultValue={productName}
                     value={productData?.ProductName}
                     // defaultValue={productdetail?.ProductName}
-                    onChange={handlechange} 
+                    onChange={handlechange}
                   />
                   <input
                     type="number"
@@ -135,4 +161,68 @@ const EditProductModal = ({ productdetail }) => {
   );
 };
 
-export default EditProductModal
+export default EditProductModal;
+
+// try {
+//   await setDoc(doc(db, "Products", editproductId), productData);
+// } catch (error) {
+//   console.log(error);
+// }
+
+// productData.id = editproductId;
+// console.log(productData.id);
+//   try {
+//   const q = query(
+//     collection(db, "Products"),
+//     where("id", "==", productData.id)
+//   )
+//   console.log(q)
+//   const querySnapshot = await getDocs(q);
+//   console.log(querySnapshot);
+//   let docId;
+//   querySnapshot.forEach((doc) => {
+//     docId = doc.id
+//     {console.log(docId)}
+//   })
+//   const collectionRef = doc(db, "Products", docId);
+//   console.log(collectionRef)
+//   // await updateDoc(collectionRef, {
+//   //       ProductName: productData.ProductName,
+//   //       ProductPrice: Number(productData.ProductPrice),
+//   //       // ProductImg: url,
+//   // });
+//   }catch (error) {
+//   console.log(error);
+// }
+
+// // Pid = productdetail;
+// // const storageRef = ref(storage, `product-images/${productImg.name + v4()}`);
+// // const upload = uploadBytesResumable(storageRef, productImg);
+// const q = query(collection(db, "Products"), where("id", "=="));
+// const querySnapshot = await getDocs(q);
+// // console.log(querySnapshot, "querySnapshot");
+// let docId
+// querySnapshot.forEach((doc) => {
+//  docId = doc.id;
+// });
+// console.log(docId)
+//  const collectionRef = doc(db, "Products", docId);
+//   await updateDoc(collectionRef, {
+//     ProductName: productData.ProductName,
+//     ProductPrice: Number(productData.ProductPrice),
+//     // ProductImg: url,
+//   }).catch((err) => console.log(err));
+
+// upload.on(
+//   "state_changed",
+//   (snapshot) => {
+//     const prog = Math.round(
+//       (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+//     );
+//     console.log(prog);
+//   },
+//   (err) => console.log(err),
+// () => {
+// getDownloadURL(upload.snapshot.ref)
+// }
+// );
