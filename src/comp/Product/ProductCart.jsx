@@ -15,12 +15,14 @@ import {
   deleteDoc,
 } from "firebase/firestore/lite";
 import { Fetch_Product } from "../../redux/action/ProductAction";
+import DeletModal from "../modal/DeletModal";
 
 const ProductCart = () => {
-  const [product, SetProduct] = useState([]);
-  const [editproductId, seteditproductId] = useState();
+  // const [product, SetProduct] = useState([]);
+  const [prodId, setprodId] = useState();
   const productsCollectionRef = collection(db, "Products");
   const dispatch = useDispatch();
+  const productdetail = useSelector((state) => state.productReducer);
 
 
   
@@ -41,22 +43,23 @@ const ProductCart = () => {
     fetchProjectData();
   }, []);
 
-  useEffect(() => {
-    const getProducts = async () => {
-      const data = await getDocs(productsCollectionRef);
-      SetProduct(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    };
-    getProducts();
-  }, []);
+  // const getProducts = async () => {
+  //   const data = await getDocs(productsCollectionRef);
+  //   SetProduct(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  // };
+
+  // useEffect(() => {
+  //   getProducts();
+  // }, []);
 
   const getProductId = (prod) =>{
-      seteditproductId(prod);
+      setprodId(prod);
       // console.log(prod)
   }
 
   return (
     <>
-      {product.map((prod, index) => {
+      {productdetail.map((prod, index) => {
         return (
           <div className={style.ProductCart} key={index}>
             <div className={style.IconImage_wrapper}>
@@ -89,23 +92,20 @@ const ProductCart = () => {
                     >
                       Edit Product
                     </a>
-
-                    {/* {
-                      productdetail?.ProductName?<>
-                      <EditProductModal
-                      // productName={productdetail.productName}
-                      productdetail={productdetail}
-                      // productId={productid}
-                    />
-                    </>:""
-                    } */}
                   </li>
                   <li>
-                    <a class="dropdown-item" type="button">
+                    <a
+                      class="dropdown-item"
+                      type="button"
+                      data-bs-toggle="modal"
+                      data-bs-target="#exampleDeleteProductModal"
+                      onClick={() => getProductId(prod.id)}
+                    >
                       Delet Product
                     </a>
                   </li>
                 </ul>
+                <DeletModal prodId={prodId} />
               </div>
               <h3>{prod.ProductName}</h3>
               <div className={style.ProductPriceMain}>
@@ -120,12 +120,7 @@ const ProductCart = () => {
           </div>
         );
       })}
-
-      <EditProductModal
-        // productName={productdetail.productName}
-        editproductId ={editproductId}
-        // productId={productid}
-      />
+      <EditProductModal prodId={prodId} />
     </>
   );
 };

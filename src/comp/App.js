@@ -3,11 +3,13 @@
 import ApplicationRoutes from "../routes/Routes";
 import Dashbord from "./dashboard/Dashbord";
 import CurrentUser from "../redux/user";
+import { ToastContainer } from "react-bootstrap";
 
 
 function App() {
   return (
     <>
+      
        {/* <SignUp/> */}
       <ApplicationRoutes />
       <CurrentUser />

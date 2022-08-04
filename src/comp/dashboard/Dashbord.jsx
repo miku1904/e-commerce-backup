@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { LogoutUser } from "../../redux/action/User";
 import WishList from '../WishProduct/WishList'
+import { ToastContainer } from 'react-toastify'
 
 const Dashbord = ({children}) => {
   const dispatch = useDispatch();
@@ -61,6 +62,7 @@ const Dashbord = ({children}) => {
           </div>
         </div>
         <div className={style.HeaderSection}>
+      <ToastContainer />
           <div className={style.UserProfile}>
             <img src={UserProfile}></img>
             <h3>Dharmik</h3>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getDownloadURL, ref,  uploadBytesResumable } from "firebase/storage";
 import { storage, db } from "../../firebase";
 import {v4} from "uuid"
@@ -8,12 +8,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { Add_Product } from "../../redux/action/ProductAction";
 
 const AddProduct = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch(); 
   const [productData, setProductData] = useState({
     ProductName: "",
     ProductPrice: "",
   });
   const [productImg, setProductimg] = useState(null);
+  const [productReduxData ,setProductReduxData] = useState()
+  // console.log(productData, "productData");
 
   const productImageHandler = (e) => {
     if (e.target.files[0]) {
@@ -29,31 +31,44 @@ const AddProduct = () => {
     });
   };
 
+  
+  
   const handelSubmit = (e) => {
     e.preventDefault();
     const storageRef = ref(storage, `product-images/${productImg.name + v4()}`);
     const upload = uploadBytesResumable(storageRef, productImg);
-
+    
     upload.on("state_changed",(snapshot) =>{
       const prog = Math.round(
         (snapshot.bytesTransferred/snapshot.totalBytes) * 100
-      ); 
-      console.log(prog);  
+        );  
+        console.log(prog);  
       },(err)=>console.log(err),
       () =>{
         getDownloadURL(upload.snapshot.ref)
-        .then(async(url)=>{
+        .then(async (url) => {
+         productData.ProductImg = url;
           await addDoc(collection(db, "Products"), {
             ProductName: productData.ProductName,
             ProductPrice: Number(productData.ProductPrice),
             ProductImg: url,
-          }); 
-          dispatch(Add_Product(productData))
-          .catch((err) => console.log(err));
-        })
+          })  
+            console.log(productData, "productData") 
+            dispatch(Add_Product(productData)); 
+        });
       }
       )
     }
+    //   setProductReduxData({
+    //   ProductName: productData.ProductName,
+    //   ProductPrice: Number(productData.ProductPrice),
+    //   ProductImg: url,
+    // })
+
+
+    // useEffect(() => {
+    //   // dispatch(Add_Product(productReduxData)) 
+    // }, []);
     
     //   )
     // },

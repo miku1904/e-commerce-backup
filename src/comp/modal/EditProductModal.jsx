@@ -3,6 +3,8 @@ import "./EditProduct.css";
 import { useDispatch, useSelector } from "react-redux";
 import { storage, db } from "../../firebase";
 import { v4 } from "uuid";
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'; 
 import {
   collection,
   addDoc,
@@ -15,7 +17,7 @@ import {
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
-const EditProductModal = ({ editproductId }) => {
+const EditProductModal = ({ prodId, getProducts }) => {
   const [productImg, setProductimg] = useState();
   const [productData, setProductData] = useState({
     ProductName: "",
@@ -24,8 +26,8 @@ const EditProductModal = ({ editproductId }) => {
   });
   const productdetail = useSelector((state) => state.productReducer);
   // console.log(projectDetail,'product')
-  let currentProject = productdetail.find((item) => item.id === editproductId);
-  console.log(productData, "currentProduct");
+  let currentProject = productdetail.find((item) => item.id === prodId);
+  // console.log(productData, "currentProduct");
 
   const productImageHandler = (e) => {
     if (e.target.files[0]) {
@@ -36,7 +38,7 @@ const EditProductModal = ({ editproductId }) => {
   useEffect(() => {
     setProductData(currentProject);
     // console.log(productData, "productData");
-  }, [editproductId]);
+  }, [prodId]);
 
   const handlechange = (e) => {
     const value = e.target.value;
@@ -47,36 +49,38 @@ const EditProductModal = ({ editproductId }) => {
   };
   const handleEditSubmit = async (e) => {
     e.preventDefault();
-    if(productImg){
-        const storageRef = ref(storage, `product-images/${productImg + v4()}`);
-        const upload = uploadBytesResumable(storageRef, productImg);
-        upload.on(
-          "state_changed",
-          (snapshot) => {
-            const prog = Math.round(
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-            );
-            console.log(prog);
-          },
-          (err) => console.log(err),
-          () => {
-            getDownloadURL(upload.snapshot.ref).then(async (url) => {
-              await setDoc(doc(db, "Products", editproductId), {
-                ProductName: productData.ProductName,
-                ProductImg: url,
-                ProductPrice: productData.ProductPrice,
-              }).catch((err) => console.log(err));
-            });
-          }
-        );
-    }
-    else{
-      await setDoc(doc(db, "Products", editproductId), {
+    if (productImg) {
+      const storageRef = ref(storage, `product-images/${productImg + v4()}`);
+      const upload = uploadBytesResumable(storageRef, productImg);
+      upload.on(
+        "state_changed",
+        (snapshot) => {
+          const prog = Math.round(
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+          );
+          console.log(prog);
+        },
+        (err) => console.log(err),
+        () => {
+          getDownloadURL(upload.snapshot.ref).then(async (url) => {
+            await setDoc(doc(db, "Products", prodId), {
+              ProductName: productData.ProductName,
+              ProductImg: url,
+              ProductPrice: productData.ProductPrice,
+            }).catch((err) => console.log(err));
+            toast.success("Edit data successfully");
+          });
+        }
+      );
+    } else {
+      await setDoc(doc(db, "Products", prodId ), {
         ProductName: productData.ProductName,
-        ProductImg:productData.ProductImg,
+        ProductImg: productData.ProductImg,
         ProductPrice: productData.ProductPrice,
       }).catch((err) => console.log(err));
+      // toast.success("Edit data successfully")
     }
+    getProducts();
   };
 
   return (
