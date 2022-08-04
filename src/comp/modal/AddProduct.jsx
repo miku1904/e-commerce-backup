@@ -4,8 +4,11 @@ import { storage, db } from "../../firebase";
 import {v4} from "uuid"
 import { collection, addDoc } from "firebase/firestore"; 
 import "./AddProduct.css"
+import { useDispatch, useSelector } from "react-redux";
+import { Add_Product } from "../../redux/action/ProductAction";
 
 const AddProduct = () => {
+  const dispatch = useDispatch();
   const [productData, setProductData] = useState({
     ProductName: "",
     ProductPrice: "",
@@ -44,7 +47,9 @@ const AddProduct = () => {
             ProductName: productData.ProductName,
             ProductPrice: Number(productData.ProductPrice),
             ProductImg: url,
-          }).catch((err) => console.log(err));
+          }); 
+          dispatch(Add_Product(productData))
+          .catch((err) => console.log(err));
         })
       }
       )
@@ -114,7 +119,7 @@ const AddProduct = () => {
                 <div className="mb-3">
                   <input
                     type="text"
-                    name="productName"
+                    name="ProductName"
                     className="form-control mb-3"
                     id="exampleFormControlInput1"
                     placeholder="Product Name"

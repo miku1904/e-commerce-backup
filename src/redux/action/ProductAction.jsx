@@ -1,5 +1,6 @@
 import {
     FETCH_PRODUCT,
+    ADD_PRODUCT,
   } from "../actionType/ProductType";
   
   export function Fetch_Product(data) {
@@ -9,5 +10,10 @@ import {
     };
   }
   
-  
+  export function Add_Product(data) {
+    return {
+      type: ADD_PRODUCT,
+      payload: data,
+    };
+  }
   
