@@ -23,6 +23,7 @@ const CurrentUser = () => {
           password:data.password,
           uid: dataId
         };
+        console.log(userData,"userData")
         dispatch(Get_User(userData));
         // console.log(doc);
       } catch (err) {

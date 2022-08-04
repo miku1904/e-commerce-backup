@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import style from "./ProductCart.module.css";
 import CartIcon from "../../asert/Cart.svg";
 import DotMenu  from "../../asert/DotMenu.svg"
-import CartIconBlanck from "../../asert/CartIconBlanck.svg";
-import { collection, getDocs } from "firebase/firestore";
+import WishIcon from "../../asert/CartIconBlanck.svg";
+import { collection, getDocs  } from "firebase/firestore";
 import { db } from "../../firebase";
 import EditProductModal from "../modal/EditProductModal";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,18 +13,27 @@ import {
   addDoc,
   doc,
   deleteDoc,
-} from "firebase/firestore/lite";
+} from "firebase/firestore";
 import { Fetch_Product } from "../../redux/action/ProductAction";
 import DeletModal from "../modal/DeletModal";
 
 const ProductCart = () => {
   // const [product, SetProduct] = useState([]);
   const [prodId, setprodId] = useState();
-  const productsCollectionRef = collection(db, "Products");
+  // const productsCollectionRef = collection(db, "Products");
   const dispatch = useDispatch();
   const productdetail = useSelector((state) => state.productReducer);
 
+  const userdetail = useSelector((state) => state.userReducer);
 
+  const addToWishList = async (product) => {
+    try{
+      // console.log(userdetail?.uid)
+       addDoc(collection(db, "wishlist"),{...product,userId:userdetail?.uid})  
+    }catch(error){
+      console.log(error,"id")
+    }
+  }
   
   const fetchProjectData = async () => {
     try {
@@ -57,6 +66,8 @@ const ProductCart = () => {
       // console.log(prod)
   }
 
+
+
   return (
     <>
       {productdetail.map((prod, index) => {
@@ -64,7 +75,7 @@ const ProductCart = () => {
           <div className={style.ProductCart} key={index}>
             <div className={style.IconImage_wrapper}>
               <div className={style.CartIconBlanck}>
-                <img src={CartIconBlanck} alt="" />
+                <img src={WishIcon} alt="" type="button" onClick={()=>addToWishList(prod)}/>
               </div>
               <div className={style.ProductImage}>
                 <img src={prod.ProductImg} alt="" />
