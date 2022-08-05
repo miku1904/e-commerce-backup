@@ -3,6 +3,8 @@ import Style from "./SignIn.module.css"
 import { Link, useNavigate} from "react-router-dom";
 import { auth, db } from "../../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; 
 
 
 
@@ -31,12 +33,13 @@ const handleSubmit = (e) =>{
    const isValid = Formvalidation();
    if(isValid){
    signInWithEmailAndPassword(auth, ldata.email, ldata.password)
-      .then(async (res) => {
+   .then(async (res) => {
+        toast.success("Log In sucess Welcome")  
         console.log(res.user);
         navigate("/productdashboard");
       })
       .catch((err) => {
-       setFirebaseError(err.message);
+        setFirebaseError(err.message);
       });
   };
 

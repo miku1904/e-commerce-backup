@@ -4,6 +4,8 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db} from "../../firebase";
 import { collection, addDoc } from "firebase/firestore"; 
 import { Link,useNavigate} from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; 
 
 const SignUp = () => {
   const [nameErr , SetNameError] = useState({})
@@ -45,6 +47,7 @@ const SignUp = () => {
           password: data.password,
           role:data.role,
         });
+        toast.success("Sign Up successfully")
         navigate("/productdashboard");
       })
       .catch((err) => { 

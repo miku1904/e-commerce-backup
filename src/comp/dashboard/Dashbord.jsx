@@ -62,11 +62,16 @@ const Dashbord = ({children}) => {
           </div>
         </div>
         <div className={style.HeaderSection}>
-      <ToastContainer />
+          <ToastContainer />
           <div className={style.UserProfile}>
             <img src={UserProfile}></img>
             <h3>Dharmik</h3>
-            <button onClick={handleLogOut}>Logout</button>
+            <button 
+              className="btn btn-danger btn-sm rounder rounded-pill ms-3"
+              onClick={handleLogOut}
+            >
+              Logout
+            </button>
           </div>
 
           <div className={style.Navbar}>

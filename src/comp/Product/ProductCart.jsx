@@ -16,6 +16,8 @@ import {
 } from "firebase/firestore";
 import { Fetch_Product } from "../../redux/action/ProductAction";
 import DeletModal from "../modal/DeletModal";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; 
 
 const ProductCart = () => {
   // const [product, SetProduct] = useState([]);
@@ -29,7 +31,8 @@ const ProductCart = () => {
   const addToWishList = async (product) => {
     try{
       // console.log(userdetail?.uid)
-       addDoc(collection(db, "wishlist"),{...product,userId:userdetail?.uid})  
+       addDoc(collection(db, "wishlist"),{...product,userId:userdetail?.uid})
+        toast.info("Add to wishlist successfully", { theme: "colored" } );
     }catch(error){
       console.log(error,"id")
     }

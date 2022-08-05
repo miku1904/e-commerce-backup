@@ -29,3 +29,10 @@
     width: 540px;
     border: 1px solid #D1D1D1;
 }
+
+.WishCartWrapper {
+    margin-top: 46px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}

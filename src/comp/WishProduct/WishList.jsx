@@ -1,6 +1,8 @@
 import React from 'react'
 import style from "./WishList.module.css"
 import SearchIcon from "../../asert/SearchIcon.svg";
+import WishProduct from './WishProduct';
+
 
 
 const WishList = () => {
@@ -18,6 +20,9 @@ const WishList = () => {
             className={style.SearchBarInput}
             placeholder="Search among 1000+ products"
           />
+        </div>
+        <div className={style.WishCartWrapper}>
+        <WishProduct />
         </div>
       </div>
     </div>
