@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import style from "./ProductDashBord.module.css"
 import SearchIcon from "../../asert/SearchIcon.svg"
 import ProductCart from './ProductCart';
 import AddProduct from '../modal/AddProduct';
 
 const ProductDashBord = () => {
+  useEffect(()=>{
+    console.log("productDashboard")
+  },[])
   return (
     <div className={style.ProductPageContainer}>
       <div className={style.productHeader}>

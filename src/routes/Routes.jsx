@@ -7,6 +7,7 @@ import CartProduct from "../comp/cartProduct/CartProduct";
 import SignIn from "../comp/signIn/SigIn";
 import SignUp from "../comp/signUp/SignUp";
 import { useDispatch, useSelector } from "react-redux";
+import ProtectedRoute from "../comp/ProtectedRoute";
 
 
 
@@ -15,18 +16,13 @@ function ApplicationRoutes() {
   
   return (
     <>
-      <BrowserRouter>
+      {/* <BrowserRouter> */}
         <Routes>
-          {/* {console.log(userDetail, "userDetail")} */}
+       
           <Route exact path="/" element={<SignIn />} />
           <Route path="/SignUp" element={<SignUp />} />
 
-          {/* {
-            userDetail.user?<Route path="/dashboard" element={<Dashbord />}/>:<Route path="/dashboard" element={<SignIn />}/>
-          } */}
-          {/* {
-            userDetail.name&&<Route path="/dashboard" element={<Dashbord />}/>
-          } */}
+         
           {userDetail.name && (
             <Route
               path="/productdashboard"
@@ -56,11 +52,49 @@ function ApplicationRoutes() {
                 </Dashbord>
               }
             />
-          )}
+          )} 
+       
+            {/* <Route
+              path="/productdashboard"
+              element={
+                  <ProtectedRoute>
+                <Dashbord>
 
-          {/* <Route path="*" element={<SignIn />} /> */}
+                  <ProductDashBord />
+                </Dashbord>
+                  </ProtectedRoute>
+              }
+            />
+         
+       
+            <Route
+              path="/WishListdashboard"
+              element={
+                  <ProtectedRoute>
+                <Dashbord>
+
+                  <WishList />
+                </Dashbord>
+                  </ProtectedRoute>
+              }
+            />
+       
+       
+            <Route
+              path="/Cartdashboard"
+              element={
+                  <ProtectedRoute>
+                  <Dashbord>
+                      <CartProduct />
+                  </Dashbord>
+                  </ProtectedRoute>
+              }
+            />
+         */}
+
+      
         </Routes>
-      </BrowserRouter>
+      {/* </BrowserRouter> */}
     </>
   );
 }

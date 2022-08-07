@@ -17,7 +17,9 @@ import {
 } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
+
 const EditProductModal = ({ prodId, getProducts }) => {
+  
   const [productImg, setProductimg] = useState();
   const [productData, setProductData] = useState({
     ProductName: "",

@@ -32,6 +32,7 @@ const CurrentUser = () => {
     };
 
   useEffect(() => {
+    console.log("user")
     if (loading) return;
     if (!user) return error;
     fetchUserData(); 

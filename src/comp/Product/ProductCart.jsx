@@ -3,6 +3,7 @@ import style from "./ProductCart.module.css";
 import CartIcon from "../../asert/Cart.svg";
 import DotMenu  from "../../asert/DotMenu.svg"
 import WishIcon from "../../asert/CartIconBlanck.svg";
+import WishIconREd from "../../asert/WIshIConRed.svg"
 import { collection, getDocs  } from "firebase/firestore";
 import { db } from "../../firebase";
 import EditProductModal from "../modal/EditProductModal";
@@ -13,16 +14,20 @@ import {
   addDoc,
   doc,
   deleteDoc,
+  updateDoc
 } from "firebase/firestore";
 import { Fetch_Product } from "../../redux/action/ProductAction";
 import DeletModal from "../modal/DeletModal";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; 
+import { Add_wishProduct } from "../../redux/action/WishAction";
+import Edit_product from "../../redux/action/ProductAction"
 
 const ProductCart = () => {
+  console.log("Productcart") 
   // const [product, SetProduct] = useState([]);
   const [prodId, setprodId] = useState();
-  // const productsCollectionRef = collection(db, "Products");
+  const productsCollectionRef = collection(db, "Products");
   const dispatch = useDispatch();
   const productdetail = useSelector((state) => state.productReducer);
 
@@ -32,7 +37,21 @@ const ProductCart = () => {
     try{
       // console.log(userdetail?.uid)
        addDoc(collection(db, "wishlist"),{...product,userId:userdetail?.uid})
+       dispatch(Add_wishProduct({...product,userId:userdetail?.uid})); 
         toast.info("Add to wishlist successfully", { theme: "colored" } );
+
+
+        const q = query(collection(db, "projects"), where("id", "==", product.id));
+        const querySnapshot = await getDocs(q);
+        let docId;
+        querySnapshot.forEach((doc) => {
+          docId = doc.id;
+        });
+        const collectionRef = doc(db, "projects", docId);
+        await updateDoc(collectionRef, {
+          IsWishList: true,
+        });
+        dispatch(Edit_product(data));
     }catch(error){
       console.log(error,"id")
     }
@@ -43,9 +62,9 @@ const ProductCart = () => {
       const q = query(collection(db, "Products"));
       const doc = await getDocs(q);
       
-      doc.forEach((doc) => {
-        dispatch(Fetch_Product({...doc.data(),id:doc.id}));
-      });
+        doc.forEach((doc) => {
+          dispatch(Fetch_Product({...doc.data(),id:doc.id}));
+        });
     } catch (err) {
       console.error(err);
     }
@@ -78,7 +97,13 @@ const ProductCart = () => {
           <div className={style.ProductCart} key={index}>
             <div className={style.IconImage_wrapper}>
               <div className={style.CartIconBlanck}>
-                <img src={WishIcon} alt="" type="button" onClick={()=>addToWishList(prod)}/>
+                {
+                  prod.IsWishList?<>
+                  <img src={WishIconREd} alt="" type="button" onClick={()=>addToWishList(prod)}/>
+                  </>:<>
+                  <img src={WishIcon} alt="" type="button" onClick={()=>addToWishList(prod)}/>
+                  </>
+                }
               </div>
               <div className={style.ProductImage}>
                 <img src={prod.ProductImg} alt="" />
@@ -119,7 +144,7 @@ const ProductCart = () => {
                     </a>
                   </li>
                 </ul>
-                <DeletModal prodId={prodId} />
+                {/* <DeletModal prodId={prodId} /> */}
               </div>
               <h3>{prod.ProductName}</h3>
               <div className={style.ProductPriceMain}>
@@ -134,7 +159,7 @@ const ProductCart = () => {
           </div>
         );
       })}
-      <EditProductModal prodId={prodId} />
+      {/* <EditProductModal prodId={prodId} /> */}
     </>
   );
 };

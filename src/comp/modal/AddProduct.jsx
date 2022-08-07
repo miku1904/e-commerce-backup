@@ -12,6 +12,7 @@ const AddProduct = () => {
   const [productData, setProductData] = useState({
     ProductName: "",
     ProductPrice: "",
+    IsWishList:false
   });
   const [productImg, setProductimg] = useState(null);
   const [productReduxData ,setProductReduxData] = useState()
@@ -52,6 +53,7 @@ const AddProduct = () => {
             ProductName: productData.ProductName,
             ProductPrice: Number(productData.ProductPrice),
             ProductImg: url,
+            IsWishList:false
           })  
             console.log(productData, "productData") 
             dispatch(Add_Product(productData)); 

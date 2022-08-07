@@ -1,4 +1,4 @@
-import { FETCH_PRODUCT, ADD_PRODUCT } from "../actionType/ProductType";
+import { FETCH_PRODUCT, ADD_PRODUCT, EDIT_Product } from "../actionType/ProductType";
 let initialState = [];
 
 const productReducer = (state = initialState, action) => {
@@ -7,6 +7,9 @@ const productReducer = (state = initialState, action) => {
       return [...state, action.payload];
 
     case ADD_PRODUCT:
+      return [...state, action.payload];
+
+    case EDIT_Product:
       return [...state, action.payload];
 
     default:

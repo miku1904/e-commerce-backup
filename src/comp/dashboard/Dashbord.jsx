@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import style from "./Dashbord.module.css"
 import logo from "../../asert/logo.svg"
 import Home from "../../asert/Home.svg"
@@ -12,12 +12,13 @@ import { signOut } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { LogoutUser } from "../../redux/action/User";
-import WishList from '../WishProduct/WishList'
 import { ToastContainer } from 'react-toastify'
 
 const Dashbord = ({children}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const userdetail = useSelector((state) => state.userReducer);
 
   const handleLogOut = () => {
     signOut(auth);
@@ -65,7 +66,7 @@ const Dashbord = ({children}) => {
           <ToastContainer />
           <div className={style.UserProfile}>
             <img src={UserProfile}></img>
-            <h3>Dharmik</h3>
+            <h3>{userdetail?.name}</h3>
             <button 
               className="btn btn-danger btn-sm rounder rounded-pill ms-3"
               onClick={handleLogOut}

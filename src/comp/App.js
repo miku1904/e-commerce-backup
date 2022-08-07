@@ -3,18 +3,18 @@
 import ApplicationRoutes from "../routes/Routes";
 import Dashbord from "./dashboard/Dashbord";
 import CurrentUser from "../redux/user";
+import React from "react";
 // import { ToastContainer } from "react-bootstrap";
 
 
 function App() {
+  React.useEffect(()=>{
+    console.log("App")
+  },[])
   return (
     <>
-      
-       {/* <SignUp/> */}
       <ApplicationRoutes />
       <CurrentUser />
-      {/* <Dashbord/>   */}
-       {/* <SignIn/> */}
     </>
   );
 }
