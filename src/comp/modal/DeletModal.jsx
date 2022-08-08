@@ -7,7 +7,7 @@ const DeletModal = ({prodId}) => {
  
 
     const deleteProduct = async(id) => {
-      console.log(id);
+      // console.log(id); 
       try{
         await deleteDoc(doc(db , "Products", id))
       }catch{

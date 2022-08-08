@@ -19,6 +19,8 @@ const Dashbord = ({children}) => {
   const navigate = useNavigate();
 
   const userdetail = useSelector((state) => state.userReducer);
+  const WishList = useSelector((state) => state.WishProductReducer);
+  console.log(WishList.length, "length");
 
   const handleLogOut = () => {
     signOut(auth);
@@ -67,7 +69,7 @@ const Dashbord = ({children}) => {
           <div className={style.UserProfile}>
             <img src={UserProfile}></img>
             <h3>{userdetail?.name}</h3>
-            <button 
+            <button
               className="btn btn-danger btn-sm rounder rounded-pill ms-3"
               onClick={handleLogOut}
             >
@@ -81,7 +83,7 @@ const Dashbord = ({children}) => {
                 <div className={style.NavIconHEart}>
                   <Link to="/WishListdashboard" className={style.WishLink}>
                     <img src={HeartIcon} alt="heart" />
-                    <h5>Wish List (0)</h5>
+                    <h5>Wish List ({WishList.length})</h5>
                   </Link>
                 </div>
                 <div className={style.NavIcon}>

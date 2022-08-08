@@ -6,6 +6,8 @@ import { collection, addDoc } from "firebase/firestore";
 import "./AddProduct.css"
 import { useDispatch, useSelector } from "react-redux";
 import { Add_Product } from "../../redux/action/ProductAction";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; 
 
 const AddProduct = () => {
   const dispatch = useDispatch(); 
@@ -57,6 +59,7 @@ const AddProduct = () => {
           })  
             console.log(productData, "productData") 
             dispatch(Add_Product(productData)); 
+            toast.success("Add product successfully")
         });
       }
       )

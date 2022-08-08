@@ -4,7 +4,7 @@ import CartIcon from "../../asert/Cart.svg";
 import DotMenu  from "../../asert/DotMenu.svg"
 import WishIcon from "../../asert/CartIconBlanck.svg";
 import WishIconREd from "../../asert/WIshIConRed.svg"
-import { collection, getDocs  } from "firebase/firestore";
+import { collection, getDoc, getDocs  } from "firebase/firestore";
 import { db } from "../../firebase";
 import EditProductModal from "../modal/EditProductModal";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,10 +21,10 @@ import DeletModal from "../modal/DeletModal";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; 
 import { Add_wishProduct } from "../../redux/action/WishAction";
-import Edit_product from "../../redux/action/ProductAction"
+import {Edit_product} from "../../redux/action/ProductAction";
 
 const ProductCart = () => {
-  console.log("Productcart") 
+  // console.log("Productcart") 
   // const [product, SetProduct] = useState([]);
   const [prodId, setprodId] = useState();
   const productsCollectionRef = collection(db, "Products");
@@ -34,24 +34,38 @@ const ProductCart = () => {
   const userdetail = useSelector((state) => state.userReducer);
 
   const addToWishList = async (product) => {
+    console.log(product)
+    
     try{
       // console.log(userdetail?.uid)
        addDoc(collection(db, "wishlist"),{...product,userId:userdetail?.uid})
-       dispatch(Add_wishProduct({...product,userId:userdetail?.uid})); 
+       console.log(product)
+       dispatch(Add_wishProduct(product)); 
         toast.info("Add to wishlist successfully", { theme: "colored" } );
 
 
-        const q = query(collection(db, "projects"), where("id", "==", product.id));
-        const querySnapshot = await getDocs(q);
-        let docId;
-        querySnapshot.forEach((doc) => {
-          docId = doc.id;
-        });
-        const collectionRef = doc(db, "projects", docId);
-        await updateDoc(collectionRef, {
-          IsWishList: true,
-        });
-        dispatch(Edit_product(data));
+      const docRef = doc(db, "Products", product.id);
+      const docSnap = await updateDoc(docRef, { IsWishList: true })
+        
+
+      // console.log("Document data:", docSnap.data());    
+        // const dataId = doc.docs[0].id;
+      //    updateDoc(doc(db, "Products", product.id), {
+      //    IsWishList: true, 
+      //  });
+
+      //  dispatch(Edit_product());
+
+        // const q = query(collection(db, "projects"), where("id", "==", product.id));
+        // const querySnapshot = await getDocs(q);
+        // let docId;
+        // querySnapshot.forEach((doc) => {
+        //   docId = doc.id;
+        // });
+        // const collectionRef = doc(db, "projects", docId);
+        // await updateDoc(collectionRef, {
+        //   IsWishList: true,
+        // });
     }catch(error){
       console.log(error,"id")
     }
@@ -84,7 +98,7 @@ const ProductCart = () => {
   // }, []);
 
   const getProductId = (prod) =>{
-      setprodId(prod);
+      setprodId(prod);       
       // console.log(prod)
   }
 
@@ -144,7 +158,7 @@ const ProductCart = () => {
                     </a>
                   </li>
                 </ul>
-                {/* <DeletModal prodId={prodId} /> */}
+                <DeletModal prodId={prodId} />
               </div>
               <h3>{prod.ProductName}</h3>
               <div className={style.ProductPriceMain}>
@@ -159,7 +173,7 @@ const ProductCart = () => {
           </div>
         );
       })}
-      {/* <EditProductModal prodId={prodId} /> */}
+      <EditProductModal prodId={prodId} />
     </>
   );
 };

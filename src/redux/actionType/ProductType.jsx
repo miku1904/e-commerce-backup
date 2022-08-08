@@ -1,4 +1,4 @@
 export const FETCH_PRODUCT = "FETCH_PRODUCT";
 export const ADD_PRODUCT = "ADD_PRODUCT";
-export const EDIT_Product = "EDIT_Product";
+export const EDIT_PRODUCT = "EDIT_EDIT_PRODUCTPRODUCT";
 

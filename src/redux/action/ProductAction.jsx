@@ -1,9 +1,8 @@
 import {
-    FETCH_PRODUCT,
-    ADD_PRODUCT,
-    EDIT_Product
-
-  } from "../actionType/ProductType";
+  FETCH_PRODUCT,
+  ADD_PRODUCT,
+  EDIT_PRODUCT
+} from "../actionType/ProductType";
   
   export function Fetch_Product(data) {
     return {
@@ -21,7 +20,7 @@ import {
 
   export function Edit_product(data) {
     return {
-      type: EDIT_Product,
+      type: EDIT_PRODUCT,
       payload: data,
     };
   }

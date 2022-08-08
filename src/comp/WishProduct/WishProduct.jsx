@@ -19,48 +19,73 @@ import {
 } from "firebase/firestore";
 import { Fetch_wishProduct } from '../../redux/action/WishAction';
 import {Delete_WishProduct} from '../../redux/action/WishAction';
-// import { async } from '@firebase/util';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; 
 
 const WishProduct = () => {
   const dispatch = useDispatch();
   const userdetail = useSelector((state) => state.userReducer);
-  const [products,setProducts] = useState([])
+  const wishlist = useSelector((state) => state.WishProductReducer);
+  
+
+
+
+  const RemoveEditItem =async (id) =>{
+    console.log(id)
+       try{
+        await deleteDoc(doc(db , "wishlist", id))
+        toast.info("Remove wishlist successfully", { theme: "colored" }); 
+      }catch{
+
+      }
+
+  }
   const fetchWishListData = async () => {
     // console.log("fetchWishListData")
     try {
       // dispatch(Delete_WishProduct());
-  
       const q = query(collection(db, "wishlist"), where("userId", "==", userdetail?.uid));
       const doc = await getDocs(q);
-      const data = []
+      const data = [] 
    
       doc.forEach(async(doc) => {
-         data.push({...doc.data()})
-        dispatch(Fetch_wishProduct({...doc.data()}));
-      });
-      dispatch(Fetch_wishProduct(data));
-      setProducts(data)
+         data.push({...doc.data(),id:doc.id})
+         dispatch(Fetch_wishProduct({ ...doc.data(),Wishid:doc.id}));
+        });
+        // dispatch(Fetch_wishProduct(...data));  
+      // dispatch(Fetch_wishProduct(data));
     } catch (err) {
       console.error(err);
     }
   };
-
+  
   useEffect(() => {
-    fetchWishListData();
+    // dispatch(Fetch_wishProduct(products[0])); 
+    // console.log(products.length)
+    // console.log(wishlist.length);
+    // if (
+      //   (products.length === 0 && wishlist.length === 0) ||
+      //   products.length !== wishlist.length
+      // ) {
+        // }
+        fetchWishListData();
     // console.log("useEffect")
   }, []);
-
+ 
   return (
     <>
-     {products.map((prod, index) => {
+      {wishlist.map((prod, index) => {
         return (
           <div className={style.ProductCart} key={index}>
             <div className={style.IconImage_wrapper}>
               <div className={style.CartIconBlanck}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="20" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
-  <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
-</svg>
-                {/* <img src={HeartRegular} alt="" type="button" style={{"width":"25px",margin:"10px"}} className={style.heartIcon}/> */}
+                <img
+                  src={WishIconREd}
+                  alt=""
+                  type="button"
+                  onClick={() => RemoveEditItem(prod.id)}
+                  // className={style.heartIcon}
+                />
               </div>
               <div className={style.ProductImage}>
                 <img src={prod.ProductImg} alt="" />
@@ -69,39 +94,6 @@ const WishProduct = () => {
             <div className={style.ProductDetail}>
               <div className={style.menu_wrapper}>
                 <p>Promo Code : 10521</p>
-                <img
-                  // src={DotMenu}
-                  alt=""
-                  type="button"
-                  class="btn dropdown-toggle"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                />
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                  <li>
-                    <a
-                      class="dropdown-item"
-                      type="button"
-                      data-bs-toggle="modal"
-                      data-bs-target="#exampleEditProductModal "
-                      // onClick={() => getProductId(prod.id)}
-                    >
-                      Edit Product
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      class="dropdown-item"
-                      type="button"
-                      data-bs-toggle="modal"
-                      data-bs-target="#exampleDeleteProductModal"
-                      // onClick={() => getProductId(prod.id)}
-                    >
-                      Delet Product
-                    </a>
-                  </li>
-                </ul>
-                {/* <DeletModal prodId={prodId} /> */}
               </div>
               <h3>{prod.ProductName}</h3>
               <div className={style.ProductPriceMain}>
