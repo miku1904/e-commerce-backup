@@ -21,7 +21,8 @@ const CurrentUser = () => {
           name:data.name,
           email: data.email,
           password:data.password,
-          uid: dataId
+          role:data.role,
+          uid: dataId,
         };
         console.log(userData,"userData")
         dispatch(Get_User(userData));

@@ -1,80 +1,58 @@
-import React, { useEffect, useState } from 'react'
-// import style from "./WIshProduct.module.css";
+import React, { useEffect, useState } from "react";
 import CartIcon from "../../asert/Cart.svg";
-import WishIcon from "../../asert/CartIconBlanck.svg";
-import HeartRegular from "../../asert/HeartRegular.svg";
-import HeartSolid from "../../asert/HeartSolid.png"
-import WishIconREd from "../../asert/WIshIConRed.svg"
-import toy from "../../asert/ToyCar.svg"
-import style from "../Product/ProductCart.module.css"
-import { collection, getDocs  } from "firebase/firestore";
+import WishIconREd from "../../asert/WIshIConRed.svg";
+import style from "../Product/ProductCart.module.css";
+import { collection, getDocs, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  query,
-  where,
-  addDoc,
-  doc,
-  deleteDoc,
-} from "firebase/firestore";
-import { Fetch_wishProduct } from '../../redux/action/WishAction';
-import {Delete_WishProduct} from '../../redux/action/WishAction';
+import { query, where, addDoc, doc, deleteDoc } from "firebase/firestore";
+import { Fetch_wishProduct } from "../../redux/action/WishAction";
+import { Delete_WishProduct } from "../../redux/action/WishAction";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css"; 
+import "react-toastify/dist/ReactToastify.css";
 
 const WishProduct = () => {
   const dispatch = useDispatch();
   const userdetail = useSelector((state) => state.userReducer);
   const wishlist = useSelector((state) => state.WishProductReducer);
-  
 
-
-
-  const RemoveEditItem =async (id) =>{
-    console.log(id)
-       try{
-        await deleteDoc(doc(db , "wishlist", id))
-        toast.info("Remove wishlist successfully", { theme: "colored" }); 
-      }catch{
-
-      }
-
-  }
-  const fetchWishListData = async () => {
-    // console.log("fetchWishListData")
+  const RemoveWishItem = async (prod) => {
     try {
-      // dispatch(Delete_WishProduct());
-      const q = query(collection(db, "wishlist"), where("userId", "==", userdetail?.uid));
+      await deleteDoc(doc(db, "wishlist", prod.Wishid));
+      toast.info("Remove wishlist successfully", { theme: "colored" });
+      const docRef = doc(db, "Products", prod.id);
+      const docSnap = await updateDoc(docRef, { IsWishList: false });
+    } catch (WIshDeleteError) {
+      console.log(WIshDeleteError, "WIshDeleteError");
+    }
+  };
+  const fetchWishListData = async () => {
+    try {
+      const q = query(
+        collection(db, "wishlist"),
+        where("userId", "==", userdetail?.uid)
+      );
       const doc = await getDocs(q);
-      const data = [] 
-   
-      doc.forEach(async(doc) => {
-         data.push({...doc.data(),id:doc.id})
-         dispatch(Fetch_wishProduct({ ...doc.data(),Wishid:doc.id}));
-        });
-        // dispatch(Fetch_wishProduct(...data));  
-      // dispatch(Fetch_wishProduct(data));
+      const data = [];
+
+      doc.forEach(async (doc) => {
+        data.push({ ...doc.data(), id: doc.id });
+        dispatch(Fetch_wishProduct({ ...doc.data(), Wishid: doc.id }));
+      });
     } catch (err) {
       console.error(err);
     }
   };
-  
+
   useEffect(() => {
-    // dispatch(Fetch_wishProduct(products[0])); 
-    // console.log(products.length)
-    // console.log(wishlist.length);
-    // if (
-      //   (products.length === 0 && wishlist.length === 0) ||
-      //   products.length !== wishlist.length
-      // ) {
-        // }
-        fetchWishListData();
-    // console.log("useEffect")
+    fetchWishListData();
   }, []);
- 
+
   return (
     <>
       {wishlist.map((prod, index) => {
+          // console.log(prod.id,"product.id")
+        // console.log(prod.Wishid,"product.id")
         return (
           <div className={style.ProductCart} key={index}>
             <div className={style.IconImage_wrapper}>
@@ -83,8 +61,7 @@ const WishProduct = () => {
                   src={WishIconREd}
                   alt=""
                   type="button"
-                  onClick={() => RemoveEditItem(prod.id)}
-                  // className={style.heartIcon}
+                  onClick={() => RemoveWishItem(prod)}
                 />
               </div>
               <div className={style.ProductImage}>
@@ -110,6 +87,6 @@ const WishProduct = () => {
       })}
     </>
   );
-}
+};
 
 export default WishProduct;

@@ -2,11 +2,18 @@ import React from 'react'
 import style from "./CartProduct.module.css"
 
 const CartProduct = () => {
+
   return (
-    <div>
-    <h1 className={style.CartProductHEding}>Welcome to CartPage</h1>
+    <div className={style.cartpagemain}>
+      <div className={style.middelsection}>
+        <div className={style.cartpagecontain}></div>
+        <div className={style.cartpagecontain}></div>
+        <div className={style.cartpagecontain}></div>
+        <div className={style.cartpagecontain}></div>
+      </div>
+      <div className={style.cartsidesection}></div>
     </div>
-  )
+  );
 }
 
 export default CartProduct;

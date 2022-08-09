@@ -1,0 +1,22 @@
+.cartpagecontain{
+    max-width: auto ;
+    border: 2px solid black;
+    height: 200px;
+    margin-top: 20px ;
+}
+
+.middelsection{
+  width: 75%;
+}
+
+.cartsidesection{
+    height: 500px;
+    width: 23%;
+    border: 2px solid black; 
+    margin-top: 20px;
+}
+
+.cartpagemain{
+    display: flex;
+    justify-content: space-between;
+}

@@ -29,6 +29,7 @@ const ProductCart = () => {
   const [prodId, setprodId] = useState();
   const productsCollectionRef = collection(db, "Products");
   const dispatch = useDispatch();
+  const WishPoduct = useSelector((state) => state.WishProductReducer);
   const productdetail = useSelector((state) => state.productReducer);
 
   const userdetail = useSelector((state) => state.userReducer);
@@ -101,7 +102,19 @@ const ProductCart = () => {
       setprodId(prod);       
       // console.log(prod)
   }
+const [wishListpro,setWishListpro] = useState([])
+useEffect(()=>{
+  const a =[];
+WishPoduct.forEach((item) => {
+  a.push(item.id);
+});
 
+setWishListpro(a);
+
+},[]);
+
+
+  console.log(wishListpro);
 
 
   return (
@@ -111,13 +124,25 @@ const ProductCart = () => {
           <div className={style.ProductCart} key={index}>
             <div className={style.IconImage_wrapper}>
               <div className={style.CartIconBlanck}>
-                {
-                  prod.IsWishList?<>
-                  <img src={WishIconREd} alt="" type="button" onClick={()=>addToWishList(prod)}/>
-                  </>:<>
-                  <img src={WishIcon} alt="" type="button" onClick={()=>addToWishList(prod)}/>
+                {wishListpro.includes(prod.id) ? (
+                  <>
+                    <img
+                      src={WishIconREd}
+                      alt=""
+                      type="button"
+                      onClick={() => addToWishList(prod)}
+                    />
                   </>
-                }
+                ) : (
+                  <>
+                    <img
+                      src={WishIcon}
+                      alt=""
+                      type="button"
+                      onClick={() => addToWishList(prod)}
+                    />
+                  </>
+                )}
               </div>
               <div className={style.ProductImage}>
                 <img src={prod.ProductImg} alt="" />
@@ -126,14 +151,16 @@ const ProductCart = () => {
             <div className={style.ProductDetail}>
               <div className={style.menu_wrapper}>
                 <p>Promo Code : 10521</p>
-                <img
-                  src={DotMenu}
-                  alt=""
-                  type="button"
-                  class="btn dropdown-toggle"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                />
+                {userdetail.role === "admin" && (
+                  <img
+                    src={DotMenu}
+                    alt=""
+                    type="button"
+                    class="btn dropdown-toggle"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  />
+                )}
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                   <li>
                     <a
