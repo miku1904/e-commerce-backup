@@ -26,6 +26,7 @@ const WishProduct = () => {
       console.log(WIshDeleteError, "WIshDeleteError");
     }
   };
+  
   const fetchWishListData = async () => {
     try {
       const q = query(

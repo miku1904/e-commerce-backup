@@ -20,7 +20,8 @@ const Dashbord = ({children}) => {
 
   const userdetail = useSelector((state) => state.userReducer);
   const WishList = useSelector((state) => state.WishProductReducer);
-  console.log(WishList.length, "length");
+  const cartproduct = useSelector((state) => state.CartproductReducer);
+  // console.log(WishList.length, "length");
 
   const handleLogOut = () => {
     signOut(auth);
@@ -65,8 +66,6 @@ const Dashbord = ({children}) => {
           </div>
         </div>
 
-
-        
         <div className={style.HeaderSection}>
           <ToastContainer />
           <div className={style.UserProfile}>
@@ -92,7 +91,7 @@ const Dashbord = ({children}) => {
                 <div className={style.NavIcon}>
                   <Link to="/Cartdashboard" className={style.WishLink}>
                     <img src={Cart} alt="Cart" />
-                    <h5>2 Products -</h5>
+                    <h5>({cartproduct.length}) Products -</h5>
                   </Link>
                   <h4>$1000</h4>
                 </div>

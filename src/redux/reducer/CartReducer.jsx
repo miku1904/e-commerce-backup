@@ -1,14 +1,16 @@
 import {
-  FETCH_WISHPRODUCT,
-  ADD_WISHPRODUCT,
-  DELETE_WISHPRODUCT,
-} from "../actionType/WishType";
+  FETCH_CARTPRODUCT,
+  ADD_CARTPRODUCT,
+} from "../actionType/CartActionType";
+
 let initialState = [];
 
-const WishProductReducer = (state = initialState, action) => {
+
+
+const CartproductReducer = (state = initialState, action) => {
   switch (action.type) {
-    case FETCH_WISHPRODUCT:
-     const uState = [...state, action.payload];
+    case FETCH_CARTPRODUCT:
+      const uState = [...state, action.payload];
       const uniqueIds = [];
       const unique = uState.filter((element) => {
         const isDuplicate = uniqueIds.includes(element.id);
@@ -22,15 +24,13 @@ const WishProductReducer = (state = initialState, action) => {
       // console.log(state);
       return state;
 
-    case ADD_WISHPRODUCT:
+    case ADD_CARTPRODUCT:
       return [...state, action.payload];
-
-    case DELETE_WISHPRODUCT:
-      return [];
 
     default:
       return state;
   }
 };
 
-export default WishProductReducer;
+
+export default CartproductReducer;
