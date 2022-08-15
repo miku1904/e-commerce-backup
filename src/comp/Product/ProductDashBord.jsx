@@ -9,11 +9,11 @@ import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../../firebase';
 
 const ProductDashBord = () => {
+
   const dispatch = useDispatch();
   const userdetail = useSelector((state) => state.userReducer);
-  useEffect(()=>{
-    console.log("productDashboard")
-  },[])
+
+  //Fetch cart product data // 
   const fetchCartData = async () => {
     try {
       const q = query(
@@ -25,17 +25,24 @@ const ProductDashBord = () => {
       const data = [];
 
       doc.forEach(async (doc) => {
-        data.push({ ...doc.data()});
+        data.push({ ...doc.data() });
+        dispatch(Fetch_CartProduct({ ...doc.data() }));
       });
-      dispatch(Fetch_CartProduct({ ...doc.data()}));
     } catch (err) {
       console.error(err);
     }
   };
-
   useEffect(() => {
     fetchCartData();
   }, []);
+
+
+  //Fetch Wish product data //
+
+
+
+  
+
   return (
     <div className={style.ProductPageContainer}>
       <div className={style.productHeader}>

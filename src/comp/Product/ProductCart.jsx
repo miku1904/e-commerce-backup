@@ -26,19 +26,16 @@ import { Add_CartProduct } from "../../redux/action/CartAction";
 import { async } from "@firebase/util";
 import { Fetch_CartProduct } from "../../redux/action/CartAction";
 
+
+
 const ProductCart = () => {
-  // console.log("Productcart")
-  // const [product, SetProduct] = useState([]);
   const [prodId, setprodId] = useState();
-  const productsCollectionRef = collection(db, "Products");
+  // const productsCollectionRef = collection(db, "Products");
   const dispatch = useDispatch();
   const WishPoduct = useSelector((state) => state.WishProductReducer);
   const productdetail = useSelector((state) => state.productReducer);
   const CartproductReducer = useSelector((state) => state.CartproductReducer);
-
   const userdetail = useSelector((state) => state.userReducer);
-
-
 
   const AddToCartProduct = async (product) =>{
 
@@ -56,7 +53,6 @@ const ProductCart = () => {
           userId: userdetail?.uid,
           qty: 1,
         })
-        console.log(data?.id,'data')
         const pd = {...product,userId:userdetail?.uid,qty:1,cardId:data?.id}
         await setDoc(doc(db, "cartproduct", data?.id), pd)
         dispatch( Add_CartProduct(pd))
@@ -69,48 +65,28 @@ const ProductCart = () => {
     } catch (error) {
       console.log(error, "Addtocart");
     }
-
   }
+
+
   const addToWishList = async (product) => {
     console.log(product);
 
     try {
-      // console.log(userdetail?.uid)
-      addDoc(collection(db, "wishlist"), {
+      const data = await addDoc(collection(db, "wishlist"), {
         ...product,
         userId: userdetail?.uid,
       });
-      console.log(product);
-      dispatch(Add_wishProduct(product));
+      const WishPd = { ...product, userId: userdetail?.uid, Wishid: data?.id };
+      await setDoc(doc(db, "wishlist", data?.id), WishPd);
+      dispatch(Add_wishProduct(WishPd));
       toast.info("Add to wishlist successfully", { theme: "colored" });
 
-      // const docRef = doc(db, "Products", product.id);
-      // const docSnap = await updateDoc(docRef, { IsWishList: true });
-
-      // console.log("Document data:", docSnap.data());
-      // const dataId = doc.docs[0].id;
-      //    updateDoc(doc(db, "Products", product.id), {
-      //    IsWishList: true,
-      //  });
-
-      //  dispatch(Edit_product());
-
-      // const q = query(collection(db, "projects"), where("id", "==", product.id));
-      // const querySnapshot = await getDocs(q);
-      // let docId;
-      // querySnapshot.forEach((doc) => {
-      //   docId = doc.id;
-      // });
-      // const collectionRef = doc(db, "projects", docId);
-      // await updateDoc(collectionRef, {
-      //   IsWishList: true,
-      // });
     } catch (error) {
       console.log(error, "id");
     }
   };
 
-  const fetchProjectData = async () => {
+  const fetchProductData = async () => {
     try {
       const q = query(collection(db, "Products"));
       const doc = await getDocs(q);
@@ -124,17 +100,9 @@ const ProductCart = () => {
   };
 
   useEffect(() => {
-    fetchProjectData();
+    fetchProductData();
   }, []);
 
-  // const getProducts = async () => {
-  //   const data = await getDocs(productsCollectionRef);
-  //   SetProduct(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-  // };
-
-  // useEffect(() => {
-  //   getProducts();
-  // }, []);
 
   const getProductId = (prod) => {
     setprodId(prod);

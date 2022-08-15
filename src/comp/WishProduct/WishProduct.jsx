@@ -37,8 +37,8 @@ const WishProduct = () => {
       const data = [];
 
       doc.forEach(async (doc) => {
-        data.push({ ...doc.data(), id: doc.id });
-        dispatch(Fetch_wishProduct({ ...doc.data(), Wishid: doc.id }));
+        data.push({ ...doc.data() });
+        dispatch(Fetch_wishProduct({ ...doc.data()}));
       });
     } catch (err) {
       console.error(err);
