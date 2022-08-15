@@ -4,7 +4,7 @@ import CartIcon from "../../asert/Cart.svg";
 import DotMenu from "../../asert/DotMenu.svg";
 import WishIcon from "../../asert/CartIconBlanck.svg";
 import WishIconREd from "../../asert/WIshIConRed.svg";
-import { collection, getDoc, getDocs } from "firebase/firestore";
+import { collection, getDoc, getDocs, setDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import EditProductModal from "../modal/EditProductModal";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,6 +23,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { Add_wishProduct } from "../../redux/action/WishAction";
 import { Edit_product } from "../../redux/action/ProductAction";
 import { Add_CartProduct } from "../../redux/action/CartAction";
+import { async } from "@firebase/util";
+import { Fetch_CartProduct } from "../../redux/action/CartAction";
 
 const ProductCart = () => {
   // console.log("Productcart")
@@ -32,19 +34,38 @@ const ProductCart = () => {
   const dispatch = useDispatch();
   const WishPoduct = useSelector((state) => state.WishProductReducer);
   const productdetail = useSelector((state) => state.productReducer);
+  const CartproductReducer = useSelector((state) => state.CartproductReducer);
 
   const userdetail = useSelector((state) => state.userReducer);
 
 
 
-  const AddToCartProduct = (product) =>{
+  const AddToCartProduct = async (product) =>{
+
     try {
-      addDoc(collection(db, "cartproduct"), {
-        ...product,
-        userId: userdetail?.uid,
+      let repeat = false
+      CartproductReducer?.map((item)=>{
+        if(item.id == product.id){
+          repeat = true
+        }
       })
-      dispatch( Add_CartProduct(product))
-      toast.info("Add to cart successfully", { icon: "🛒"  });
+      if(repeat == false){
+
+        const data = await addDoc(collection(db, "cartproduct"), {
+          ...product,
+          userId: userdetail?.uid,
+          qty: 1,
+        })
+        console.log(data?.id,'data')
+        const pd = {...product,userId:userdetail?.uid,qty:1,cardId:data?.id}
+        await setDoc(doc(db, "cartproduct", data?.id), pd)
+        dispatch( Add_CartProduct(pd))
+        toast.info("Add to cart successfully", { icon: "🛒"  });
+
+      }
+      else{
+        toast.error("This product already added", { icon: "🛒"  });
+      }
     } catch (error) {
       console.log(error, "Addtocart");
     }
